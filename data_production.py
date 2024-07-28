@@ -33,7 +33,8 @@ market_data = data[data["Ticker"] == market]
 #%% Modifying the data
 
 # drop irrelevant columns
-market_data = market_data.drop(columns=["Adj Close"])
+# (Open same as porevious day's close, Adj Close same as Close)
+market_data = market_data.drop(columns=["Open", "Adj Close"])
 
 # convert date to datetime
 data['Date'] = pd.to_datetime(data['Date'])
@@ -53,6 +54,12 @@ market_data = market_data.dropna()
 # calculate the spread
 market_data["Spread"] = (market_data["High"] - market_data["Low"]) / market_data["Close"]
 
+#%% Plot the data
+
+fig, ax = plt.subplots(figsize=(10, 6))
+# plot the daily return
+ax.plot(market_data["Date"], market_data["Daily Return"], 'k.')
+ax.set_xticks(market_data["Date"][::500])
 
 #%% Final timings 
 tend = time() # end time for the script
