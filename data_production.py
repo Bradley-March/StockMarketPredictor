@@ -8,6 +8,33 @@ import matplotlib.pyplot as plt
 from os.path import join as osjoin
 from time import time
 
+#%% Set up functions to produce the data set
+
+def get_dataset(years_included=range(2008, 2023), market="^FTSE"):
+    # load data into Python
+    data = pd.read_csv(osjoin("Global_Market_Data", str(years_included[0]) + "_Global_Markets_Data.csv"))
+    for year in years_included[1:]: # combine every year into one dataframe
+        data = pd.concat([data, pd.read_csv(osjoin("Global_Market_Data", str(year) + "_Global_Markets_Data.csv"))], ignore_index=True) 
+    
+    # create a subset of the data for a single ticker
+    market_data = data[data["Ticker"] == market]
+    # drop irrelevant columns
+    # (Open same as porevious day's close, Adj Close same as Close)
+    market_data = market_data.drop(columns=["Open", "Adj Close"])
+    # convert date to datetime
+    data['Date'] = pd.to_datetime(data['Date'])
+    # sort by date
+    data = data.sort_values("Date").reset_index(drop=True)
+
+    # calculate daily percentage change
+    market_data["Daily Return"] = market_data["Close"].pct_change()
+    # drop the first row as it will be NaN
+    market_data = market_data.dropna()
+    # calculate the spread
+    market_data["Spread"] = (market_data["High"] - market_data["Low"]) / market_data["Close"]
+
+    return market_data
+
 # set up interactive figure windows
 mpl.use("TkAgg")
 plt.ion()
