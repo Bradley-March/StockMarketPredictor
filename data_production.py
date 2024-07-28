@@ -56,10 +56,17 @@ market_data["Spread"] = (market_data["High"] - market_data["Low"]) / market_data
 
 #%% Plot the data
 
-fig, ax = plt.subplots(figsize=(10, 6))
+fig, (ax1, ax2) = plt.subplots(nrows=2, sharex=True, figsize=(10, 8))
 # plot the daily return
-ax.plot(market_data["Date"], market_data["Daily Return"], 'k.')
-ax.set_xticks(market_data["Date"][::500])
+ax1.plot(market_data["Date"], market_data["Daily Return"], 'k.')
+ax1.set_ylabel("Daily Percent Change")
+# plot the daily spread
+ax2.plot(market_data["Date"], market_data["Spread"], 'r.')
+ax2.set_xticks(market_data["Date"][::250])  # set x-ticks to roughly yearly intervals
+ax2.set_ylabel("Spread [(High - Low) / Close]")
+
+fig.autofmt_xdate() # rotate x-axis labels
+fig.tight_layout() # adjust subplots to fit into figure area
 
 #%% Final timings 
 tend = time() # end time for the script
