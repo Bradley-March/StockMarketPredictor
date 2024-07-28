@@ -13,9 +13,9 @@ from os.path import join as osjoin
 
 #%% Set up functions to produce the data set
 
-def get_dataset(years_included=range(2008, 2023), market="^FTSE"):
+def get_dataset(years_included=range(2008, 2023+1), market="^FTSE"):
     """
-    Input:  years_included - list of years to include in the dataset
+    Input:  years_included - list of years to include in the dataset (min 2008, max 2023)
             market - the ticker for the market to include in the dataset
     Output: market_data - a pandas dataframe containing the data for the specified market
     Load the data from the Global_Market_Data folder and return a subset of the data for a single ticker.
