@@ -7,24 +7,37 @@
 # import necessary packages/functions
 import numpy as np
 import pandas as pd
+import matplotlib as mpl
+import matplotlib.pyplot as plt
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import mean_squared_error
 from data_production import get_dataset
 from time import time
 
+# set up interactive figure windows
+mpl.use("TkAgg")
+plt.ion()
+
 tstart = time() # start time for the script
 
 
 #%% Load data from the data_production.py script
 
-data = get_dataset(years_included=range(2008, 2023+1), market="^FTSE")
+number_of_lag_days = 5
+
+data = get_dataset(years_included=range(2008, 2023+1), market="^FTSE", number_of_lag_days=number_of_lag_days)
 
 #%% Split the data into training and testing sets
 
 # define the features and target variable
-features = ["Daily Return", "Spread", "Volume"]
 target = "Daily Return"
+features_names = ["Daily Return", "Spread", "Volume"]
+# add lag features to the features list
+features = []
+for col in features_names:
+    for i in range(1, number_of_lag_days+1):
+        features += [(f"{col}_lag_{i}")]
 
 # split the data into features and target variable
 X = data[features]
@@ -55,16 +68,11 @@ y_actual = np.array(y)[-y_pred.size:]
 
 #%% Plot the actual vs predicted values
 
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-# set up interactive figure windows
-mpl.use("TkAgg")
-plt.ion()
-
 fig, (ax1, ax2) = plt.subplots(2, sharex=True, figsize=(14, 6))
+ax1.axhline(0, color='k', linestyle='--', alpha=0.5)
 ax1.plot(y_actual, 'b-', alpha=0.3)
 ax1.plot(y_pred, 'r-', alpha=0.3)
-ax2.plot(y_actual -  y_pred, 'k.')
+ax2.plot(y_actual -  y_pred, 'k.-')
 fig.tight_layout()
 
 #%% Timings
