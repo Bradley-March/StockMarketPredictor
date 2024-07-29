@@ -48,6 +48,7 @@ y_pred = model.predict(X_test)
 
 # calculate the mean squared error
 mse = mean_squared_error(y_test, y_pred)
+print("Mean Squared Error: {:.4f}".format(mse))
 
 # get the actual values for the last n predictions
 y_actual = np.array(y)[-y_pred.size:]
