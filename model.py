@@ -52,6 +52,19 @@ mse = mean_squared_error(y_test, y_pred)
 # get the actual values for the last n predictions
 y_actual = np.array(y)[-y_pred.size:]
 
+#%% Plot the actual vs predicted values
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+# set up interactive figure windows
+mpl.use("TkAgg")
+plt.ion()
+
+fig, (ax1, ax2) = plt.subplots(2, sharex=True, figsize=(14, 6))
+ax1.plot(y_actual, 'b-', alpha=0.3)
+ax1.plot(y_pred, 'r-', alpha=0.3)
+ax2.plot(y_actual -  y_pred, 'k.')
+fig.tight_layout()
 
 #%% Timings
 tend = time() # end time for the script
