@@ -66,14 +66,28 @@ print("Mean Squared Error: {:.4f}".format(mse))
 # get the actual values for the last n predictions
 y_actual = np.array(y)[-y_pred.size:]
 
+#%% Calculate when the model agrees with the direction the stock moves
+
+correct = np.sign(y_actual) == np.sign(y_pred)
+# print percent of times model agrees with actual
+print("Percent of times model agrees with actual", 100 * np.sum(correct) / correct.size)
+
+# print percent of times the actual value is positive
+print("Percent of times the actual value is positive", 100 * np.sum(y_actual > 0) / y_actual.size)
+
 #%% Plot the actual vs predicted values
+
+xrange = np.arange(len(y_actual))
 
 fig, (ax1, ax2) = plt.subplots(2, sharex=True, figsize=(14, 6))
 ax1.axhline(0, color='k', linestyle='--', alpha=0.5)
-ax1.plot(y_actual, 'b-', alpha=0.3)
-ax1.plot(y_pred, 'r-', alpha=0.3)
+ax1.plot(y_actual, 'k-', alpha=0.3)
+ax1.plot(y_pred, 'b-', alpha=0.3)
+ax1.plot(xrange[correct], y_pred[correct], 'g.')
+ax1.plot(xrange[~correct], y_pred[~correct], 'r.')
 ax2.plot(y_actual -  y_pred, 'k.-')
 fig.tight_layout()
+
 
 #%% Timings
 tend = time() # end time for the script
