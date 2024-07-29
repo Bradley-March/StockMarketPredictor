@@ -13,7 +13,7 @@ from os.path import join as osjoin
 
 #%% Set up functions to produce the data set
 
-def get_dataset(years_included=range(2008, 2023+1), market="^FTSE"):
+def get_dataset(years_included=range(2008, 2023+1), market="^FTSE", number_of_lag_days=1):
     """
     Input:  years_included - list of years to include in the dataset (min 2008, max 2023)
             market - the ticker for the market to include in the dataset
@@ -41,6 +41,13 @@ def get_dataset(years_included=range(2008, 2023+1), market="^FTSE"):
     market_data = market_data.dropna()
     # calculate the spread
     market_data["Spread"] = (market_data["High"] - market_data["Low"]) / market_data["Close"]
+
+    # add lag features for Daily Returns, Spread, and Volume
+    for col in ["Daily Returns", "Spread", 'Volume']:
+        for i in range(1, number_of_lag_days+1):  
+            market_data[f'{col}_lag_{i}'] = market_data[col].shift(i)
+    # drop rows with NaN values (due to creating lag features)
+    market_data = market_data.dropna()
 
     return market_data
 
