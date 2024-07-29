@@ -92,6 +92,18 @@ ax2.set_xticks(dates[::20]) # set x-ticks to roughly monthly intervals
 fig.autofmt_xdate() # rotate x-axis labels
 fig.tight_layout() # adjust subplots to fit into figure area
 
+#%% Profit and loss calculation
+
+# get opening/closing values
+y_open = data["Close"].values[-1-y_pred.size:-1]
+y_close = data["Close"].values[-y_pred.size:]
+
+# calculate the profit and loss
+pnl = np.sum((y_close - y_open)[y_pred > 0])
+pnl_holding = y_close[-1] - y_open[0]
+
+print("Profit and Loss: {:.2f}, {:.2f}% increase".format(pnl, 100 * pnl / y_open[0]))
+print("Holding profit and loss: £{:.2f}, {:.2f}% increase".format(pnl_holding, 100 * pnl_holding / y_open[0]))
 
 
 #%% Timings
