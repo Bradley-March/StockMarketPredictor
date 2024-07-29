@@ -1,4 +1,6 @@
-# Description: 
+# Description: This script trains a linear regression model to predict the daily return of a stock market index based on historical data. 
+# It evaluates the model's performance and calculates the percentage of times the model agrees with the actual direction of the stock movement. 
+# It also plots the actual vs predicted values and calculates the profit and loss based on the model's predictions. 
 # Created: July 2024
 # Author: Bradley March
 
@@ -21,10 +23,9 @@ plt.ion()
 
 tstart = time() # start time for the script
 
-
 #%% Load data from the data_production.py script
 
-number_of_lag_days = 1
+number_of_lag_days = 5
 
 data = get_dataset(years_included=range(2008, 2023+1), market="^FTSE", number_of_lag_days=number_of_lag_days)
 
@@ -77,13 +78,14 @@ print("Percent of times the actual value is positive", 100 * np.sum(y_actual > 0
 
 #%% Plot the actual vs predicted values
 
-xrange = np.arange(len(y_actual))
+# get the dates for the predictied values
 dates = pd.to_datetime(data["Date"].values[-y_pred.size:])
-
+# plot the actual vs predicted values
 fig, (ax1, ax2) = plt.subplots(2, sharex=True, figsize=(14, 6))
 ax1.axhline(0, color='k', linestyle='--', alpha=0.5)
 ax1.plot(dates, y_actual, 'k-', alpha=0.3)
 ax1.plot(dates, y_pred, 'b-', alpha=0.3)
+# add green/red markers for correct/incorrect predictions
 ax1.plot(dates[correct], y_actual[correct], 'g.', markersize=2)
 ax1.plot(dates[~correct], y_actual[~correct], 'r.', markersize=2)
 ax2.plot(dates, y_actual -  y_pred, 'k.-')
@@ -106,15 +108,13 @@ pnl_holding = y_close[-1] - y_open[0]
 pnl_percent = 100 * pnl / y_open[0]
 pnl_holding_percent = 100 * pnl_holding / y_open[0]
 
-# calculate the amount of time between start and end
+# calculate the amount of time between start and end dates
 time_diff = dates[-1] - dates[0]
 # convert to years
 time_diff = time_diff.days / 365.25
 
 print("Profit and Loss: £{:.2f}, {:.2f}% increase, {:.2f}% annual increase".format(pnl, pnl_percent, pnl_percent / time_diff))
 print("Holding profit and loss: £{:.2f}, {:.2f}% increase, {:.2f}% annual increase".format(pnl_holding, pnl_holding_percent, pnl_holding_percent / time_diff))
-
-
 
 #%% Timings
 tend = time() # end time for the script
