@@ -51,6 +51,10 @@ y = data[target]
 # split the data into training and testing sets
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, shuffle=False)
 
+#%% Try PCA
+
+# TODO Try PCA here
+
 #%% Train a linear regression model
 
 # TODO Try some new models here. E.g. SDGRegressor, SDGClassifier, RidgeClassifier, Kernal Approximation
