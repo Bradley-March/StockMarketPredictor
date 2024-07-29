@@ -78,15 +78,20 @@ print("Percent of times the actual value is positive", 100 * np.sum(y_actual > 0
 #%% Plot the actual vs predicted values
 
 xrange = np.arange(len(y_actual))
+dates = data["Date"].values[-y_pred.size:]
 
 fig, (ax1, ax2) = plt.subplots(2, sharex=True, figsize=(14, 6))
 ax1.axhline(0, color='k', linestyle='--', alpha=0.5)
-ax1.plot(y_actual, 'k-', alpha=0.3)
-ax1.plot(y_pred, 'b-', alpha=0.3)
-ax1.plot(xrange[correct], y_pred[correct], 'g.')
-ax1.plot(xrange[~correct], y_pred[~correct], 'r.')
-ax2.plot(y_actual -  y_pred, 'k.-')
-fig.tight_layout()
+ax1.plot(dates, y_actual, 'k-', alpha=0.3)
+ax1.plot(dates, y_pred, 'b-', alpha=0.3)
+ax1.plot(dates[correct], y_actual[correct], 'g.', markersize=5)
+ax1.plot(dates[~correct], y_actual[~correct], 'r.', markersize=5)
+ax2.plot(dates, y_actual -  y_pred, 'k.-')
+# formatting
+ax2.set_xticks(dates[::20]) # set x-ticks to roughly monthly intervals
+fig.autofmt_xdate() # rotate x-axis labels
+fig.tight_layout() # adjust subplots to fit into figure area
+
 
 
 #%% Timings
