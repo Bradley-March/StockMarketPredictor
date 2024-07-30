@@ -44,7 +44,8 @@ for col in features_names:
 X = data[features]
 y = data[target]
 
-# TODO normalise the data
+# TODO normalise the data 
+# This might not be necessary (already handled internally by the model)
 #X = (X - X.mean()) / X.std()
 #y = (y - y.mean()) / y.std()
 
