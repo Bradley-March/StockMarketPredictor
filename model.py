@@ -109,7 +109,7 @@ fig.tight_layout() # adjust subplots to fit into figure area
 y_open = data["Close"].values[-1-y_pred.size:-1]
 y_close = data["Close"].values[-y_pred.size:]
 
-# calculate the profit and loss
+# calculate the profit and loss (purchasing one share)
 pnl = np.sum((y_close - y_open)[y_pred > 0])
 pnl_holding = y_close[-1] - y_open[0]
 
