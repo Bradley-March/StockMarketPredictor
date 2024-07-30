@@ -121,9 +121,12 @@ pnl_holding_percent = 100 * pnl_holding / y_open[0]
 time_diff = dates[-1] - dates[0]
 # convert to years
 time_diff = time_diff.days / 365.25
+# calculate the CAGR (Compound Annual Growth Rate)
+CAGR = (1+pnl_percent/100)**(1/time_diff) - 1
+CAGR_holding = (1+pnl_holding_percent/100)**(1/time_diff) - 1 
 
-print("Profit and Loss: £{:.2f}, {:.2f}% increase, {:.2f}% annual increase".format(pnl, pnl_percent, pnl_percent / time_diff))
-print("Holding profit and loss: £{:.2f}, {:.2f}% increase, {:.2f}% annual increase".format(pnl_holding, pnl_holding_percent, pnl_holding_percent / time_diff))
+print("Profit and Loss: £{:.2f}, {:.2f}% increase, {:.2f}% CAGR".format(pnl, pnl_percent, 100*CAGR))
+print("Holding profit and loss: £{:.2f}, {:.2f}% increase, {:.2f}% CAGR".format(pnl_holding, pnl_holding_percent, 100*CAGR_holding))
 
 #%% Timings
 tend = time() # end time for the script
