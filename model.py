@@ -94,10 +94,13 @@ fig, (ax1, ax2) = plt.subplots(2, sharex=True, figsize=(14, 6))
 ax1.axhline(0, color='k', linestyle='--', alpha=0.5)
 ax1.plot(dates, y_actual, 'k-', alpha=0.3)
 ax1.plot(dates, y_pred, 'b-', alpha=0.3)
+ax2.plot(dates, y_actual -  y_pred, 'k.-')
 # add green/red markers for correct/incorrect predictions
 ax1.plot(dates[correct], y_actual[correct], 'g.', markersize=2)
 ax1.plot(dates[~correct], y_actual[~correct], 'r.', markersize=2)
-ax2.plot(dates, y_actual -  y_pred, 'k.-')
+ax2.plot(dates[correct], (y_actual -  y_pred)[correct], 'g.')
+ax2.plot(dates[~correct], (y_actual -  y_pred)[~correct], 'r.')
+
 # formatting
 ax2.set_xticks(dates[::20]) # set x-ticks to roughly monthly intervals
 fig.autofmt_xdate() # rotate x-axis labels
